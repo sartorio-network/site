@@ -152,6 +152,21 @@
   .contact-info dt{font-size:13px;color:var(--soft);margin-top:16px}
   .contact-info dd{margin:2px 0 0;color:var(--ink)}
 
+  /* ---------- galeria ---------- */
+  .galeria{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:38px}
+  @media(max-width:800px){.galeria{grid-template-columns:1fr}}
+  .galeria figure{margin:0}
+  .galeria img{
+    width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:6px;
+    background:var(--bg-soft);
+  }
+  .galeria figcaption{margin-top:10px;font-size:14px;color:var(--soft);line-height:1.55}
+  .galeria figcaption strong{display:block;color:var(--ink);font-weight:600;font-size:15px;margin-bottom:2px}
+  .nota{
+    margin-top:30px;padding:16px 18px;border-left:3px solid var(--line);
+    font-size:14px;color:var(--soft);background:var(--bg-soft);border-radius:0 4px 4px 0;
+  }
+
   footer{border-top:1px solid var(--line);padding:30px 0;font-size:14px;color:var(--soft)}
   .foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
   footer a{color:var(--soft);text-decoration:none}
@@ -173,7 +188,7 @@
     <nav>
       <a href="#servicos">Serviços</a>
       <a href="#processo">Como trabalhamos</a>
-      <a href="#trabalhos">Trabalhos</a>
+      <a href="#trabalhos">Experiência</a>
       <a href="#duvidas">Dúvidas</a>
     </nav>
     <a class="btn" href="#contato">Falar com a gente</a>
@@ -360,27 +375,91 @@
   <!-- ============ TRABALHOS ============ -->
   <section id="trabalhos">
     <div class="wrap">
-      <span class="eyebrow">Trabalhos realizados</span>
-      <h2>O que já fizemos</h2>
-      <p class="lead">Por acordo de confidencialidade não identificamos os clientes. O escopo é real.</p>
+      <span class="eyebrow">Experiência técnica</span>
+      <h2>Ambientes que operamos</h2>
+      <p class="lead">
+        Projetos executados em operação real, em três estados. Por confidencialidade não
+        identificamos as empresas — o escopo e os números são reais.
+      </p>
 
       <div class="grid g3" style="margin-top:38px">
         <div class="card">
-          <h3>Emissora de rádio e TV</h3>
-          <p>Troca do firewall de borda por um par em alta disponibilidade e separação das redes de
-             produção, edição e corporativo. A virada foi feita sem interromper a transmissão ao vivo.</p>
+          <h3>Cluster de firewall em alta disponibilidade</h3>
+          <p>Par de firewalls sincronizados protegendo a rede de afiliados e a cadeia de transmissão
+             para todo o Brasil. Failover testado, com caminho de volta garantido em cada janela.</p>
         </div>
         <div class="card">
-          <h3>Grupo com quatro unidades</h3>
-          <p>Interligação das unidades por VPN, padronização do endereçamento e roteamento
-             centralizado, com failover de link testado em cada ponta.</p>
+          <h3>VPN entre unidade comercial e transmissor</h3>
+          <p>Túnel interligando a unidade em shopping ao sítio do transmissor, em Brasília,
+             conectando gateways e redes distintas sem expor nenhum dos dois lados.</p>
         </div>
         <div class="card">
-          <h3>Ambiente de pós-produção</h3>
-          <p>Investigação de travamentos intermitentes nas estações de edição. Causa isolada por
-             captura de tráfego e corrigida no switch de acesso.</p>
+          <h3>Firewall de borda em unidade regional</h3>
+          <p>Implantação em São José do Rio Preto: múltiplos links, políticas por zona e
+             monitoramento de gateway com acompanhamento de perda e latência.</p>
+        </div>
+        <div class="card">
+          <h3>Wi-Fi de distribuição para +600 clientes</h3>
+          <p>Firewall dedicado à rede de distribuição sem fio, com segmentação por VLAN,
+             controle de acesso e visibilidade de tráfego em tempo real.</p>
+        </div>
+        <div class="card">
+          <h3>Estruturação completa de rede</h3>
+          <p>Separação entre switches de WAN e de LAN, padronização de portas e trunks,
+             cabeamento etiquetado e reorganização física do rack.</p>
+        </div>
+        <div class="card">
+          <h3>Análise e documentação</h3>
+          <p>Levantamento da topologia real, mapeamento de VLANs e portas em planilha,
+             diagramas atualizados e registro das mudanças aplicadas.</p>
         </div>
       </div>
+
+      <!-- ---------- galeria ---------- -->
+      <div class="galeria">
+        <figure>
+          <img src="img/fw-borda-matriz.jpg" width="1400" height="626" loading="lazy"
+               alt="Painel do firewall de borda em produção, com 40 dias de atividade contínua">
+          <figcaption>
+            <strong>Firewall de borda em produção</strong>
+            40 dias de atividade contínua, múltiplos links monitorados e 0,07% de ocupação
+            da tabela de estados sobre capacidade de 1,6 milhão.
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="img/fw-filial.jpg" width="1400" height="670" loading="lazy"
+               alt="Painel do firewall de uma unidade regional, com múltiplos gateways monitorados">
+          <figcaption>
+            <strong>Unidade regional</strong>
+            Borda com múltiplos gateways, monitoramento de latência e perda por link,
+            e serviços de rede consolidados no mesmo equipamento.
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="img/fw-wifi-distribuicao.jpg" width="1400" height="686" loading="lazy"
+               alt="Painel do firewall da rede de distribuição sem fio, com múltiplas VLANs segmentadas">
+          <figcaption>
+            <strong>Rede de distribuição sem fio</strong>
+            Mais de dez segmentos de rede separados por VLAN, com detecção de intrusão,
+            coleta de fluxo e registro de eventos ativos.
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="img/fw-unidade.jpg" width="947" height="473" loading="lazy"
+               alt="Painel do firewall de uma unidade, com 95 dias de atividade contínua">
+          <figcaption>
+            <strong>Unidade com dois links</strong>
+            95 dias sem reinício, dois provedores monitorados e separação entre as redes
+            de gerência e de produção.
+          </figcaption>
+        </figure>
+      </div>
+
+      <p class="nota">
+        As imagens são de ambientes reais em operação. Hostnames, endereços IP, nomes de operadora,
+        identificação de VLANs e registros de log foram removidos antes da publicação — é o mesmo
+        cuidado que aplicamos na documentação que entregamos a cada cliente.
+      </p>
 
       <p style="margin-top:26px;font-size:14.5px;color:var(--soft)">
         Publicamos documentação técnica e estudos no
