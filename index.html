@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sartorio Network — Firewall OPNsense e Análise de Redes Corporativas</title>
+<meta name="description" content="Implantação de firewall OPNsense, segmentação de VLANs, VPN e análise de redes para empresas, provedores e ambientes de missão crítica. Consultoria em São Paulo e remoto para todo o Brasil.">
+<meta name="author" content="Marco Antonio Corrêa Sartorio">
+<link rel="canonical" href="https://sartorionetwork.com.br/">
+
+<!-- Open Graph (preview em WhatsApp / LinkedIn / Instagram) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sartorio Network — Firewall OPNsense e Análise de Redes">
+<meta property="og:description" content="Segurança de perímetro, segmentação de rede e VPN com OPNsense. Projeto, implantação e suporte para ambientes que não podem parar.">
+<meta property="og:url" content="https://sartorionetwork.com.br/">
+<meta property="og:locale" content="pt_BR">
+
+<!-- Dados estruturados: ajuda o Google a entender que é um prestador de serviço local -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Sartorio Network",
+  "description": "Consultoria em redes corporativas, firewall OPNsense, segmentação de VLANs e VPN.",
+  "areaServed": "BR",
+  "address": { "@type": "PostalAddress", "addressLocality": "São Paulo", "addressRegion": "SP", "addressCountry": "BR" },
+  "url": "https://sartorionetwork.com.br/",
+  "sameAs": [
+    "https://www.instagram.com/sartorio.network",
+    "https://www.linkedin.com/in/SEU-PERFIL",
+    "https://github.com/sartorio-network"
+  ]
+}
+</script>
+
+<style>
+  :root{
+    --bg:#0b1017;
+    --bg-2:#111925;
+    --card:#151f2e;
+    --line:#22304a;
+    --txt:#e8eef7;
+    --muted:#93a4bd;
+    --accent:#3ddc97;
+    --accent-2:#4ea8ff;
+    --radius:14px;
+    --max:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--txt);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+  section{padding:72px 0;border-top:1px solid var(--line)}
+  h1,h2,h3{line-height:1.25;margin:0 0 14px}
+  h2{font-size:clamp(24px,3.4vw,32px)}
+  h3{font-size:18px}
+  p{margin:0 0 14px}
+  .muted{color:var(--muted)}
+  .eyebrow{
+    display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--line);border-radius:99px;padding:5px 12px;margin-bottom:18px;
+  }
+
+  /* ---------- Topo ---------- */
+  header{position:sticky;top:0;z-index:20;background:rgba(11,16,23,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;max-width:var(--max);margin:0 auto}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--txt);letter-spacing:.2px}
+  .brand:hover{text-decoration:none}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  .nav nav{display:flex;gap:22px;font-size:14px}
+  .nav nav a{color:var(--muted)}
+  .nav nav a:hover{color:var(--txt);text-decoration:none}
+  @media(max-width:760px){.nav nav{display:none}}
+
+  /* ---------- Botões ---------- */
+  .btn{
+    display:inline-block;padding:13px 22px;border-radius:10px;font-weight:600;font-size:15px;
+    background:var(--accent);color:#07130d;border:1px solid var(--accent);
+  }
+  .btn:hover{text-decoration:none;filter:brightness(1.08)}
+  .btn.ghost{background:transparent;color:var(--txt);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--accent)}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:86px 0 72px;border-top:0}
+  .hero h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.5px}
+  .hero p.lead{font-size:clamp(17px,2.2vw,19px);color:var(--muted);max-width:60ch}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .trust{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+  .trust span{font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:7px 12px;background:var(--bg-2)}
+
+  /* ---------- Grids ---------- */
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:860px){.g3,.g2{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  .card h3{margin-bottom:8px}
+  .card p{margin:0;color:var(--muted);font-size:15px}
+  .card ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
+  .card li{margin-bottom:5px}
+  .icon{font-size:20px;color:var(--accent);margin-bottom:10px;display:block}
+
+  /* ---------- Passo a passo ---------- */
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:16px}
+  ol.steps li{counter-increment:s;position:relative;padding-left:56px}
+  ol.steps li::before{
+    content:counter(s,decimal-leading-zero);position:absolute;left:0;top:0;
+    width:38px;height:38px;border-radius:10px;display:grid;place-items:center;
+    background:var(--bg-2);border:1px solid var(--line);color:var(--accent);font-weight:700;font-size:14px;
+  }
+  ol.steps strong{display:block;margin-bottom:2px}
+  ol.steps span{color:var(--muted);font-size:15px}
+
+  /* ---------- FAQ ---------- */
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+  details[open]{border-color:var(--accent-2)}
+  summary{cursor:pointer;font-weight:600;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";float:right;color:var(--accent)}
+  details[open] summary::after{content:"–"}
+  details p{margin:12px 0 0;color:var(--muted);font-size:15px}
+
+  /* ---------- Contato ---------- */
+  .contact{background:var(--bg-2)}
+  form{display:grid;gap:14px}
+  label{font-size:14px;font-weight:600}
+  input,textarea,select{
+    width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--bg);color:var(--txt);font:inherit;font-size:15px;
+  }
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:transparent}
+  textarea{min-height:120px;resize:vertical}
+  .hp{position:absolute;left:-9999px}
+
+  footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+  .foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+  .foot a{color:var(--muted)}
+
+  /* Botão flutuante de WhatsApp */
+  .float-wa{
+    position:fixed;right:18px;bottom:18px;z-index:30;background:#25D366;color:#062b16;
+    font-weight:700;padding:13px 18px;border-radius:99px;box-shadow:0 8px 26px rgba(0,0,0,.45);font-size:15px;
+  }
+  .float-wa:hover{text-decoration:none;filter:brightness(1.05)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#topo"><span class="dot"></span> Sartorio Network</a>
+    <nav>
+      <a href="#servicos">Serviços</a>
+      <a href="#como">Como funciona</a>
+      <a href="#cases">Resultados</a>
+      <a href="#faq">Dúvidas</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn" href="#contato">Solicitar diagnóstico</a>
+  </div>
+</header>
+
+<main id="topo">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Firewall • Segmentação • Alta disponibilidade</span>
+      <h1>Sua rede protegida por um firewall corporativo — sem licença anual e sem parar a operação.</h1>
+      <p class="lead">
+        Projeto e implantação de <strong>OPNsense</strong>, segmentação de VLANs, VPN site-a-site e análise de
+        desempenho para empresas que não podem ficar fora do ar. Experiência em ambiente de
+        <strong>missão crítica e broadcast</strong>, onde uma janela de manutenção errada custa audiência.
+      </p>
+      <div class="cta">
+        <a class="btn" href="#contato">Quero um diagnóstico da minha rede</a>
+        <a class="btn ghost" href="#servicos">Ver serviços</a>
+      </div>
+      <div class="trust">
+        <span>OPNsense / pfSense</span>
+        <span>Aruba CX 6300M · 6200F · 8320</span>
+        <span>Cisco Catalyst 9300</span>
+        <span>Dell PowerSwitch N-Series</span>
+        <span>WireGuard · IPsec</span>
+        <span>VLAN · OSPF · LACP · VSX/VSF</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DOR / PROBLEMA ================= -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">Isso te soa familiar?</span>
+      <h2>Rede que “funciona”, mas ninguém sabe explicar como</h2>
+      <div class="grid g3" style="margin-top:26px">
+        <div class="card">
+          <span class="icon">▲</span>
+          <h3>Renovação de firewall cara demais</h3>
+          <p>O appliance venceu e o orçamento de renovação chegou maior que o hardware. Você paga licença por recurso que talvez nem use.</p>
+        </div>
+        <div class="card">
+          <span class="icon">▲</span>
+          <h3>Rede plana, tudo na mesma VLAN</h3>
+          <p>Câmeras, servidores, Wi-Fi de visitante e estações no mesmo domínio de broadcast. Um ransomware entra por um ponto e alcança tudo.</p>
+        </div>
+        <div class="card">
+          <span class="icon">▲</span>
+          <h3>Lentidão sem causa identificada</h3>
+          <p>Travamentos intermitentes que “somem quando o técnico chega”. Sem baseline e sem monitoramento, vira chute e troca de equipamento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SERVIÇOS ================= -->
+  <section id="servicos">
+    <div class="wrap">
+      <span class="eyebrow">Serviços</span>
+      <h2>O que eu entrego</h2>
+      <p class="muted" style="max-width:62ch">Cada entrega termina com documentação em mãos: diagrama, mapa de VLANs, regras e plano de rollback. Você não fica refém do consultor.</p>
+
+      <div class="grid g2" style="margin-top:28px">
+        <div class="card">
+          <h3>Implantação de Firewall OPNsense</h3>
+          <ul>
+            <li>Dimensionamento de hardware e instalação</li>
+            <li>Regras por zona, NAT e publicação de serviços</li>
+            <li>IDS/IPS (Suricata), filtro de DNS e bloqueio de ameaças</li>
+            <li>Migração assistida do firewall atual em janela combinada</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Alta disponibilidade (Cluster HA)</h3>
+          <ul>
+            <li>Par de firewalls em CARP com sincronismo de estado</li>
+            <li>Failover testado na sua frente, não só no papel</li>
+            <li>Múltiplos links de internet com balanceamento e failover</li>
+            <li>Ideal para operação que não pode cair</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Segmentação de rede e VLANs</h3>
+          <ul>
+            <li>Separação de servidores, usuários, IoT/câmeras e visitantes</li>
+            <li>ACLs e políticas inter-VLAN aplicadas no switch e no firewall</li>
+            <li>Padronização de nomes, portas e trunks</li>
+            <li>Configuração em Aruba CX, Cisco e Dell</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>VPN corporativa</h3>
+          <ul>
+            <li>WireGuard e IPsec site-a-site entre filiais</li>
+            <li>Acesso remoto para equipe e fornecedores, com MFA</li>
+            <li>Rotas e políticas por perfil de usuário</li>
+            <li>Substituição de soluções instáveis de acesso remoto</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Análise e diagnóstico de rede</h3>
+          <ul>
+            <li>Levantamento de topologia e desenho do diagrama real</li>
+            <li>Captura de tráfego e investigação de lentidão/perda</li>
+            <li>Monitoramento com Zabbix/Grafana e alertas úteis</li>
+            <li>Relatório técnico com prioridades e custo estimado</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Suporte e sustentação mensal</h3>
+          <ul>
+            <li>Atualizações, backup de configuração e revisão de regras</li>
+            <li>SLA de atendimento definido em contrato</li>
+            <li>Acompanhamento de janelas de manutenção</li>
+            <li>Relatório mensal de saúde da rede</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMO FUNCIONA ================= -->
+  <section id="como">
+    <div class="wrap">
+      <span class="eyebrow">Como funciona</span>
+      <h2>Do primeiro contato à rede documentada</h2>
+      <ol class="steps" style="margin-top:26px">
+        <li>
+          <strong>Conversa inicial — sem custo</strong>
+          <span>30 minutos para entender o ambiente, o que dói hoje e o que não pode parar de jeito nenhum.</span>
+        </li>
+        <li>
+          <strong>Diagnóstico técnico</strong>
+          <span>Levantamento remoto ou presencial: topologia, configuração atual, riscos e gargalos. Você recebe um relatório mesmo que não feche o projeto.</span>
+        </li>
+        <li>
+          <strong>Proposta com escopo fechado</strong>
+          <span>Valor, prazo, janela de execução e plano de rollback definidos antes de encostar em qualquer equipamento.</span>
+        </li>
+        <li>
+          <strong>Execução em janela combinada</strong>
+          <span>Mudanças fora do horário crítico, com backup da configuração anterior e volta garantida se algo fugir do previsto.</span>
+        </li>
+        <li>
+          <strong>Entrega e transferência de conhecimento</strong>
+          <span>Documentação, diagrama, senhas em cofre e treinamento da sua equipe para operar o dia a dia.</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= RESULTADOS ================= -->
+  <section id="cases">
+    <div class="wrap">
+      <span class="eyebrow">Resultados</span>
+      <h2>Trabalhos realizados</h2>
+      <p class="muted" style="max-width:62ch">Por acordo de confidencialidade, os clientes não são identificados — os números e o escopo são reais.</p>
+      <div class="grid g3" style="margin-top:26px">
+        <div class="card">
+          <h3>Emissora de rádio e TV</h3>
+          <p>Substituição do firewall de borda por cluster OPNsense em HA, segmentação das VLANs de produção, edição e corporativo. Migração feita sem interromper a transmissão ao vivo.</p>
+        </div>
+        <div class="card">
+          <h3>Grupo com múltiplas filiais</h3>
+          <p>Interligação de quatro unidades por VPN site-a-site, padronização de endereçamento e roteamento centralizado, com failover de link testado em cada ponta.</p>
+        </div>
+        <div class="card">
+          <h3>Ambiente de pós-produção</h3>
+          <p>Investigação de travamentos intermitentes em estações de edição: causa isolada por captura de tráfego e ajuste de trunk/agregação nos switches de acesso.</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:22px;font-size:14px">
+        Documentação técnica sanitizada e estudos publicados no
+        <a href="https://github.com/sartorio-network" target="_blank" rel="noopener">GitHub</a> e no
+        <a href="https://www.instagram.com/sartorio.network" target="_blank" rel="noopener">Instagram @sartorio.network</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= SOBRE ================= -->
+  <section>
+    <div class="wrap">
+      <div class="grid g2" style="align-items:start">
+        <div>
+          <span class="eyebrow">Quem faz</span>
+          <h2>Marco Sartorio</h2>
+          <p class="muted">
+            Supervisor de TI responsável por rede, segurança e infraestrutura de broadcast em um grupo de comunicação
+            com quatro unidades. Formado em Ciência da Computação, com pós-graduação em Cibersegurança e em
+            Inteligência Artificial.
+          </p>
+          <p class="muted">
+            O dia a dia é operação ao vivo: rede que não pode cair, mudança que precisa de plano de volta e
+            documentação que outra pessoa consiga ler às três da manhã. É esse mesmo critério que eu aplico
+            nos projetos da Sartorio Network.
+          </p>
+          <div class="cta">
+            <a class="btn ghost" href="https://www.linkedin.com/in/SEU-PERFIL" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn ghost" href="https://www.instagram.com/sartorio.network" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Stack de trabalho</h3>
+          <ul>
+            <li><strong>Firewall:</strong> OPNsense, pfSense, Suricata, HAProxy</li>
+            <li><strong>Switching:</strong> Aruba CX (6200F/6300M/8320), Cisco Catalyst 9300, Dell N-Series</li>
+            <li><strong>Rede:</strong> VLAN, LACP, VSX/VSF, OSPF, QoS, multicast</li>
+            <li><strong>VPN:</strong> WireGuard, IPsec, OpenVPN</li>
+            <li><strong>Virtualização:</strong> XCP-ng, Proxmox, Hyper-V</li>
+            <li><strong>Monitoramento:</strong> Zabbix, Grafana, NetFlow</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq">
+    <div class="wrap">
+      <span class="eyebrow">Dúvidas frequentes</span>
+      <h2>Antes de você perguntar</h2>
+      <div style="margin-top:24px">
+        <details>
+          <summary>OPNsense é seguro para empresa? É só um firewall grátis?</summary>
+          <p>OPNsense é um firewall corporativo de código aberto, com desenvolvimento ativo e uso em produção no mundo inteiro. Não há licença por recurso nem por usuário — você investe em hardware adequado e na engenharia da implantação. A segurança vem da configuração correta, não da etiqueta do fabricante.</p>
+        </details>
+        <details>
+          <summary>Vou precisar parar a operação para trocar o firewall?</summary>
+          <p>Na maioria dos casos a migração é feita em paralelo e a virada leva poucos minutos, em janela combinada e com o firewall antigo pronto para voltar. Em ambientes críticos eu monto o cenário em bancada antes de encostar na produção.</p>
+        </details>
+        <details>
+          <summary>Vocês atendem fora de São Paulo?</summary>
+          <p>Sim. Projeto, configuração e suporte são feitos remotamente para todo o Brasil; a implantação física pode ser presencial na Grande São Paulo ou conduzida junto com a equipe local do cliente.</p>
+        </details>
+        <details>
+          <summary>Como funciona a cobrança?</summary>
+          <p>Projetos são orçados com escopo fechado, com valor e prazo definidos na proposta. Sustentação é contrato mensal com SLA. O diagnóstico inicial e a conversa de 30 minutos não têm custo.</p>
+        </details>
+        <details>
+          <summary>Minha equipe consegue administrar depois?</summary>
+          <p>Essa é a intenção. A entrega inclui documentação e treinamento. Se você preferir manter o suporte comigo, existe contrato mensal — mas por escolha, não por dependência.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTATO ================= -->
+  <section id="contato" class="contact">
+    <div class="wrap">
+      <div class="grid g2" style="align-items:start">
+        <div>
+          <span class="eyebrow">Contato</span>
+          <h2>Vamos olhar a sua rede</h2>
+          <p class="muted">
+            Descreva em duas linhas o que está acontecendo. Eu respondo em até um dia útil com uma avaliação
+            inicial e os próximos passos — sem compromisso.
+          </p>
+          <p class="muted">
+            <strong>WhatsApp:</strong> <a href="https://wa.me/55SEUNUMERO" target="_blank" rel="noopener">+55 (11) 9XXXX-XXXX</a><br>
+            <strong>E-mail:</strong> <a href="mailto:contato@sartorionetwork.com.br">contato@sartorionetwork.com.br</a><br>
+            <strong>Atendimento:</strong> São Paulo/SP e remoto para todo o Brasil
+          </p>
+        </div>
+
+        <!-- Formulário: troque SEU-ID-FORMSPREE pelo ID gerado em formspree.io -->
+        <form action="https://formspree.io/f/SEU-ID-FORMSPREE" method="POST">
+          <div>
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" required autocomplete="name">
+          </div>
+          <div>
+            <label for="empresa">Empresa</label>
+            <input id="empresa" name="empresa" type="text" autocomplete="organization">
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" required autocomplete="email">
+          </div>
+          <div>
+            <label for="assunto">O que você precisa?</label>
+            <select id="assunto" name="assunto">
+              <option>Implantação de firewall OPNsense</option>
+              <option>Cluster de alta disponibilidade</option>
+              <option>Segmentação de rede / VLANs</option>
+              <option>VPN entre filiais ou acesso remoto</option>
+              <option>Diagnóstico de lentidão / análise de rede</option>
+              <option>Suporte mensal</option>
+              <option>Outro assunto</option>
+            </select>
+          </div>
+          <div>
+            <label for="msg">Conte o cenário</label>
+            <textarea id="msg" name="mensagem" placeholder="Ex.: temos 60 estações, dois links de internet e o firewall atual vence em novembro." required></textarea>
+          </div>
+          <!-- campo anti-spam invisível -->
+          <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          <button class="btn" type="submit">Enviar mensagem</button>
+          <p class="muted" style="font-size:13px;margin:0">Seus dados são usados apenas para responder este contato.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>© <span id="ano">2026</span> Sartorio Network — Consultoria em redes e segurança · São Paulo/SP</div>
+    <div>
+      <a href="https://www.instagram.com/sartorio.network" target="_blank" rel="noopener">Instagram</a> ·
+      <a href="https://www.linkedin.com/in/SEU-PERFIL" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/sartorio-network" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/55SEUNUMERO?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20falar%20sobre%20minha%20rede." target="_blank" rel="noopener">Falar no WhatsApp</a>
+
+<script>
+  document.getElementById('ano').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
